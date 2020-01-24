@@ -13,7 +13,7 @@ from cmake_format.parse.common import (
 )
 from cmake_format.parse.simple_nodes import CommentNode
 from cmake_format.parse.argument_nodes import (
-    PositionalGroupNode, PositionalParser, StandardArgTree
+    PositionalGroupNode, PositionalParser, PositionalSpec, StandardArgTree
 )
 
 logger = logging.getLogger(__name__)
@@ -73,6 +73,7 @@ class TupleGroupNode(PositionalGroupNode):
 
       if subtree is None:
         subtree = PositionalGroupNode()
+        subtree.spec = PositionalSpec(2, False, [], flags)
         tree.children.append(subtree)
         ntup_consumed = 0
 
@@ -163,8 +164,8 @@ class FlagGroupNode(PositionalGroupNode):
     Parse a continuous sequence of flags
     """
 
-    # TODO(josh): use a bespoke FLAGGROUP?
     tree = cls()
+    tree.spec = PositionalSpec('+', False, [], flags)
     while tokens:
       # Break if the next token belongs to a parent parser, i.e. if it
       # matches a keyword argument of something higher in the stack, or if

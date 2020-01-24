@@ -23,10 +23,10 @@ format_and_lint(
   contrib/validate_pullrequest.py
   ctest_to.py
   doc/__init__.py
+  doc/bits/dump-example.cmake
   doc/CMakeLists.txt
   doc/conf.py
-  doc/docsources_test.py
-  doc/gendoc_sources.py
+  doc/gendoc.py
   formatter.py
   genparsers.py
   invocation_tests.py
@@ -41,9 +41,11 @@ format_and_lint(
   parse/body_nodes.py
   parse/common.py
   parse/printer.py
+  parse/properties.py
   parse/simple_nodes.py
   parse/statement_node.py
   parse/util.py
+  parse/variables.py
   parse_funs/__init__.py
   parse_funs/add_executable.py
   parse_funs/add_library.py
@@ -108,3 +110,39 @@ add_test(
     ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} #
     --exclude "command_tests/" "test/.*" ".*\\.jinja.py$"
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+
+add_custom_target(
+  gen-cmake_format-parse-variables.py
+  COMMAND python -Bm cmake_format.tools.parse_cmake_help --outfile
+          cmake_format/parse/variables.py variables
+  DEPENDS tools/parse_cmake_help.py tools/variables.jinja.py
+  BYPRODUCTS cmake_format/parse/variables.py
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMENT "Generating variables.py")
+
+if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+  add_custom_command(
+    OUTPUT cmake_format/parse/variables.py
+    DEPENDS gen-cmake_format-parse-variables.py
+    COMMENT "Stubbing generator for cmake_format/parse/variables.py")
+endif()
+
+add_dependencies(gen gen-cmake_format-parse-variables.py)
+
+add_custom_target(
+  gen-cmake_format-parse-properties.py
+  COMMAND python -Bm cmake_format.tools.parse_cmake_help --outfile
+          cmake_format/parse/properties.py properties
+  DEPENDS tools/parse_cmake_help.py tools/properties.jinja.py
+  BYPRODUCTS cmake_format/parse/properties.py
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMENT "Generating properties.py")
+
+if(NOT CMAKE_GENERATOR STREQUAL "Ninja")
+  add_custom_command(
+    OUTPUT cmake_format/parse/properties.py
+    DEPENDS gen-cmake_format-parse-properties.py
+    COMMENT "Stubbing generator for cmake_format/parse/properties.py")
+endif()
+
+add_dependencies(gen gen-cmake_format-parse-properties.py)

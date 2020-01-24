@@ -542,3 +542,10 @@ class TestSet(TestBase):
   Test various examples of the set() function
   """
   kExpectNumSidecarTests = 8
+
+
+class TestWhitespace(TestBase):
+  """
+  Test various specific cases involving whitespace formatting
+  """
+  kExpectNumSidecarTests = 2

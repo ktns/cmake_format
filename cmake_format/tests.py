@@ -20,7 +20,8 @@ from cmake_format.command_tests import (
     TestFile,
     TestInstall,
     TestSetTargetProperties,
-    TestSet,)
+    TestSet,
+    TestWhitespace)
 
 from cmake_format.command_tests.add_executable_tests \
     import TestAddExecutableCommand
@@ -32,8 +33,6 @@ from cmake_format.contrib.validate_database \
     import TestContributorAgreements
 from cmake_format.contrib.validate_pullrequest \
     import TestContribution
-from cmake_format.doc.docsources_test \
-    import TestDocSources
 from cmake_format.test.version_number_test \
     import TestVersionNumber
 from cmake_format.test.command_db_test \

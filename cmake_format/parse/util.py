@@ -213,9 +213,18 @@ def get_min_npargs(npargs):
     return 1
 
   if npargs.endswith("+"):
-    return int(npargs[:-1])
+    try:
+      return int(npargs[:-1])
+    except ValueError:
+      pass
 
-  raise ValueError("Unexpected npargs {}".format(npargs))
+  try:
+    return int(npargs)
+  except ValueError:
+    pass
+
+  raise ValueError(
+      "Unexpected npargs {}({})".format(npargs, type(npargs).__name__))
 
 
 LINE_TAG = re.compile(r"#\s*(cmake-format|cmf): ([^\n]*)")

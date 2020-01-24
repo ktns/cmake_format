@@ -39,7 +39,7 @@ Integrations
 Usage
 -----
 
-.. dynamic: usage-begin
+.. dynamic: format-usage-begin
 
 .. code:: text
 
@@ -86,6 +86,12 @@ Usage
 
     Various configuration options/parameters for formatting:
 
+
+    Options affecting listfile parsing:
+      --vartags [VARTAGS [VARTAGS ...]]
+                            Specify variable tags.
+      --proptags [PROPTAGS [PROPTAGS ...]]
+                            Specify property tags.
 
     Options effecting formatting.:
       --line-width LINE_WIDTH
@@ -150,6 +156,15 @@ Usage
                             the last, most agressive attempt that it made. If this
                             flag is True, however, cmake-format will print error,
                             exit with non-zero status code, and write-out nothing
+      --allow-superfluous-newlines ALLOW_SUPERFLUOUS_NEWLINES
+                            Allow up to this many superfluous newlines between
+                            elements at block level. In other words, don't
+                            collapse whitespace up to (allow_superfluous_newlines
+                            + 1) lines long.
+      --numlines-pre-statement-comment NUMLINES_PRE_STATEMENT_COMMENT
+                            Output additional newlines to increase visual
+                            separation before a statement which is immediately
+                            preceeded by a block comment
 
     Options affecting comment reflow and formatting.:
       --bullet-char BULLET_CHAR
@@ -241,7 +256,7 @@ Usage
                             utf-8. Note that cmake only claims to support utf-8 so
                             be careful when using anything else
 
-.. dynamic: usage-end
+.. dynamic: format-usage-end
 
 -------------
 Configuration
@@ -252,9 +267,9 @@ An example configuration file is given here. Additional flags and additional
 kwargs will help ``cmake-format`` to break up your custom commands in a
 pleasant way.
 
-.. dynamic: configuration-begin
+.. dynamic: configbits-begin
 
-.. code:: text
+.. code:: python
 
     # ----------------------------------
     # Options affecting listfile parsing
@@ -263,6 +278,12 @@ pleasant way.
 
       # Specify structure for custom cmake functions
       additional_commands = {'pkg_find': {'kwargs': {'PKG': '*'}}}
+
+      # Specify variable tags.
+      vartags = []
+
+      # Specify property tags.
+      proptags = []
 
     # -----------------------------
     # Options effecting formatting.
@@ -345,6 +366,15 @@ pleasant way.
       # A dictionary mapping layout nodes to a list of wrap decisions. See the
       # documentation for more information.
       layout_passes = {}
+
+      # Allow up to this many superfluous newlines between elements at block level.
+      # In other words, don't collapse whitespace up to  (allow_superfluous_newlines
+      # + 1) lines long.
+      allow_superfluous_newlines = 0
+
+      # Output additional newlines to increase visual separation before a statement
+      # which is immediately preceeded by a block comment
+      numlines_pre_statement_comment = 0
 
     # ------------------------------------------------
     # Options affecting comment reflow and formatting.
@@ -468,7 +498,7 @@ pleasant way.
       per_command = {}
 
 
-.. dynamic: configuration-end
+.. dynamic: configbits-end
 
 You may specify a path to a configuration file with the ``--config-file``
 command line option. Otherwise, ``cmake-format`` will search the ancestry
@@ -680,7 +710,6 @@ custom command would look something like this:
 
 
 .. __: https://cmake-format.rtfd.io/custom_parsers
-
 .. dynamic: features-end
 
 ---------------------------------

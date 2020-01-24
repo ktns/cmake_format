@@ -11,7 +11,8 @@ from cmake_format.command_tests import (
     TestForeach,
     TestInstall,
     TestSetTargetProperties,
-    TestSet,)
+    TestSet,
+    TestWhitespace)
 
 from cmake_format.command_tests.add_executable_tests \
     import TestAddExecutableCommand
